@@ -19,7 +19,7 @@
       - sbt
 
   - name: SBT | Create lib dir 
-    file: path="{{sbt_lib_path_target}}" state=directory
+    file: path="{{sbt_lib_path}}" state=directory
     become: yes
     when: sbt_exists | failed
     tags:
