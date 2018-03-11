@@ -1,0 +1,6 @@
+[submodule "roles/sa-java"]
+        path = roles/sa-java
+        url = https://github.com/softasap/sa-java.git
+[submodule "roles/sa-java-sbt"]
+        path = roles/sa-java-sbt
+        url = https://github.com/softasap/sa-java-sbt.git
