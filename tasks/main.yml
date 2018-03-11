@@ -1,0 +1,4 @@
+---
+# tasks file for sa-java-sbt
+
+  - include: tasks_sbt.yml

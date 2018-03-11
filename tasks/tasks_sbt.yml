@@ -1,0 +1,47 @@
+---
+
+  - set_fact:
+      bin_dir: "/sbin"
+    when: ansible_distribution in ["Alpine"]
+
+  - name: SBT | Check installed
+    shell: "test -x {{sbt_bin_link}}"
+    ignore_errors: true
+    register: sbt_exists
+    tags:
+      - sbt
+
+  - name: SBT | create install dir
+    file: path=/opt/sbt state=directory
+    become: yes
+    when: sbt_exists | failed
+    tags: 
+      - sbt
+
+  - name: SBT | Create lib dir 
+    file: path="{{sbt_lib_path_target}}" state=directory
+    become: yes
+    when: sbt_exists | failed
+    tags:
+      - sbt
+
+  - name: SBT | "Download sbt {{sbt_version}}"
+    get_url: url="https://github.com/sbt/sbt/releases/download/v{{sbt_version}}/sbt-{{sbt_version}}.tgz" dest="  dest="/opt/sbt/sbt-{{sbt_version}}.tgz"
+    become: yes
+    when: sbt_exists | failed
+    tags:
+      - sbt
+
+  - name: SBT | Unpack
+    unarchive: src="/opt/sbt/sbt-{{sbt_version}}.tgz" dest="{{sbt_lib_path}}" copy=no
+    become: yes
+    when: sbt_exists | failed
+    tags:
+      - sbt
+
+  - name: Link sbt
+    file: state=link src="{{sbt_lib_path}}/sbt/bin/sbt" dest="{{sbt_bin_link}}"
+    become: yes
+    when: sbt_exists | failed
+    tags:
+      - sbt
