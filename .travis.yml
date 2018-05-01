@@ -52,12 +52,12 @@ before_install:
   - 'sudo docker pull ${distribution}:${version}'
   # Customize container
   - 'sudo docker build --rm=true --file=tests/Dockerfile.${distribution}-${version} --tag=${distribution}-${version}:ansible tests'
+  - 'sudo docker run --rm --privileged -v /:/host ${distribution}-${version}:ansible setup || true'
+  - 'sudo mkdir -p /tmp/cgroup/systemd && sudo mount -t cgroup systemd /tmp/cgroup/systemd -o ro,noexec,nosuid,nodev,none,name=systemd'
 
 script:
   - container_id=$(mktemp)
     # Run container in detached state
-  - ${setup}
-  - sudo mkdir -p /tmp/cgroup/systemd && sudo mount -t cgroup systemd /tmp/cgroup/systemd -o ro,noexec,nosuid,nodev,none,name=systemd
   - 'sudo docker run --detach --volume="${PWD}":/etc/ansible/roles/role_under_test:ro ${run_opts} ${distribution}-${version}:ansible "${init}" > "${container_id}"'
 
   # Ansible syntax check.
