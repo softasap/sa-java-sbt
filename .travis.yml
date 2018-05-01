@@ -9,13 +9,13 @@ env:
     playbook: test.yml
   - distribution: ubuntu
     version: 16.04
-    init: "/sbin/init --log-target=journal 3>&1"
+    init: $(echo "/sbin/init --log-target=journal 3>&1")
     run_opts: "--security-opt seccomp=unconfined --tmpfs /run --tmpfs /run/lock -v /sys/fs/cgroup:/sys/fs/cgroup:ro"
     playbook: test.yml
     setup: tests/setup_4_systemd.sh
   - distribution: ubuntu
     version: 18.04
-    init: "/sbin/init --log-target=journal 3>&1"
+    init: $(echo "/sbin/init --log-target=journal 3>&1")
     run_opts: "--security-opt seccomp=unconfined --tmpfs /run --tmpfs /run/lock -v /sys/fs/cgroup:/sys/fs/cgroup:ro"
     playbook: test.yml
   - distribution: fedora
